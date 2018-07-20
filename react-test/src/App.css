@@ -22,6 +22,31 @@
   font-size: large;
 }
 
+.BorderColor{
+  padding: 10px 20px;
+  border: 10px solid;
+}
+.BorderColor-aquamarine{
+  border-color: aquamarine
+}
+
+.SplitPane{
+  width: 100%;
+  height: 100%;
+}
+.SplitPane-left{
+  width: 70%;
+  height: 100%;
+  background: lightblue;
+  float: left;
+}
+.SplitPane-right{
+  width: 30%;
+  height: 100%;
+  background: pink;
+  float: left;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

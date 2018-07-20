@@ -79,8 +79,9 @@ class FormTest extends Component{
                     </fieldset>
                 </div>
                 <div>
-                    <TempCalcu scale='c' />
-                    <TempCalcu scale='f' />
+                    <BorderColor color='aquamarine'>
+                        <TempCalcu scale='c' />
+                    </BorderColor>
                 </div>
                 <input type='submit' value='submit' />
             </form>
@@ -96,6 +97,14 @@ function BirthPlace(props) {
     }   
 }
 
+function BorderColor(props){
+    return (
+        <div className={'BorderColor BorderColor-' + props.color } >
+            {props.children}
+        </div>
+    )
+}
+
 function toCelsius(fahrenheit){
     return (fahrenheit-32)*5/9
 }
@@ -104,27 +113,68 @@ function toFahrenheit(celsius){
     return (celsius*9/5)+32
 }
 
-class TempCalcu extends React.Component{
+function tryConver(temperature, convert){
+    const input = parseFloat(temperature)
+    if (Number.isNaN(input)){
+        return ''
+    }
+    const output = convert(input)
+    const rounded = Math.round(output * 1000) / 1000
+    return rounded.toString()
+}
+
+class TempInput extends Component{
     constructor(props){
         super(props)
-        this.state = {temp: ''}
+        // this.state = {temp: ''}
         this.handleChange = this.handleChange.bind(this)
     }
-    handleChange(e){
-        this.setState({temp: e.target.value})
-        alert(this.state.temp)
+
+    handleChange(event){
+        // this.setState({temp: event.target.value})
+        this.props.onTempChange(event.target.value)
     }
+
     render(){
         let scaleName = {
             c: 'Celsius',
             f: 'Fahrenheit'
         }
+        const temperature = this.props.temperature
         const scale = this.props.scale
-        return (
+        return(
             <fieldset>
                 <legend>Enter Temp in {scaleName[scale]}:</legend>
-                <input value={this.state.temp} onChange={this.handleChange}/>
+                <input value={temperature} onChange={this.handleChange}/>
             </fieldset>
+        )
+    }
+}
+
+class TempCalcu extends React.Component{
+    constructor(props){
+        super(props)
+        this.state = {temperature: '', scale: 'c'}
+        this.handleCChange = this.handleCChange.bind(this)
+        this.handleFChange = this.handleFChange.bind(this)
+    }
+    handleCChange(temperature){
+        this.setState({scale: 'c', temperature: temperature})
+    }
+    handleFChange(temperature){
+        this.setState({scale: 'f', temperature: temperature})
+    }
+    render(){
+        const scale = this.state.scale
+        const temperature = this.state.temperature
+        const celsius = scale === 'c' ? temperature : tryConver(temperature, toCelsius)
+        const fahrenheit = scale === 'f' ? temperature : tryConver(temperature, toFahrenheit)
+
+        return (
+            <div>
+                <TempInput scale='c' temperature={celsius} onTempChange={this.handleCChange} />
+                <TempInput scale='f' temperature={fahrenheit} onTempChange={this.handleFChange} />
+            </div>
         )
     }
 }

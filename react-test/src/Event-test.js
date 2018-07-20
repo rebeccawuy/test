@@ -103,13 +103,30 @@ class Greetings extends Component{
 
         return(
             <div>
-                <Greeting isLogin = {isLogin}/>
-                <button onClick={this.handleLoginCick}>
-                    {this.state.isLogin ? 'Logout' : 'Login'}
-                </button>
+                <SplitPane 
+                    left={<Greeting isLogin = {isLogin}/>}
+                    right={
+                        <button onClick={this.handleLoginCick}>
+                            {this.state.isLogin ? 'Logout' : 'Login'}
+                        </button>
+                    }
+                 />   
             </div>
         )
     }
+}
+
+function SplitPane(props){
+    return(
+        <div className='SplitPane'>
+            <div className='SplitPane-left'>
+                {props.left}
+            </div>
+            <div className='SplitPane-right'>
+                {props.right}
+            </div>
+        </div>
+    )
 }
 
 function Greeting(props){
