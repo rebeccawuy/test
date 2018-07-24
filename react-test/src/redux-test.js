@@ -1,8 +1,9 @@
 //https://redux.js.org/basics/actions
 //https://cn.redux.js.org/
+//http://lesscss.org/
 
 
-import { createStore } from "../node_modules/redux";
+import { createStore, combineReducers } from "../node_modules/redux";
 
 // reducer的形式为：(state, action) => state的纯函数
 function counter(state = 0, action){
@@ -28,3 +29,33 @@ store.subscribe(()=>
 store.dispatch({type: 'INCREMENT'});
 store.dispatch({type: 'INCREMENT'})
 store.dispatch({type: 'DECREMENT'})
+
+
+function visibilityFilter (state = 'SHOW_ALL', action) {
+    if (action.type === 'SET_VISIBILITY_FILTER') {
+        return action.filter;
+    } else {
+        return state;
+    }
+}
+
+function todo (state = [], action) {
+    switch (action.type){
+        case 'ADD_TODO':
+            return state.concat([{text: action.text, completed: false}]);
+        case 'TOGGLE_TODO':
+            return state.map((todo, index) => 
+                action.index === index ? {text: todo.text, completed: !todo.completed} : todo
+            )
+        default:
+    }
+}
+
+function todoApp (state = {}, action) {
+    return{
+        todo: todo(state.todo, action),
+        visibilityFilter: visibilityFilter(state.visibilityFilter, action)
+    }
+}
+
+let reducer = combineReducers({ visibilityFilter, todos })

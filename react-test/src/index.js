@@ -5,8 +5,6 @@ import App from './App';
 import Result from './Event-test';
 import FormTest from './Form-test'
 
-// import registerServiceWorker from './registerServiceWorker';
-
 class Result1 extends Component{
     render(){
         return (
